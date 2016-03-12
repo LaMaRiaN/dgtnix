@@ -1,0 +1,74 @@
+
+To compile the driver run './configure' then 'make'. It will install the lib and binairies in the default system directories. You can also set this directory, see './configure --help' and option --prefix.   
+
+In this package are also present a 
+	+ dgtnix.py : a python library loader/wrapper for dgtnix. 
+	+ dgtnixTest.py : the same test/client program than dgtnixTest but written in python.
+	+ dgtnixVirtualBoard.py : a virtual DGT board to test chess programs against the driver without a board connected.
+	+ QtWidget : a directory containing the sources of QtWidget, a simple client program with a 3D view of the board. Need Qt>=4.1.
+
+ALL USERS
+---------
+
+DRIVER :
+--------
+
+./configure --prefix="/usr/" 
+make
+make install
+
+
+VIRTUAL BOARD :
+---------------
+The initial input of the dgtnix driver is a filename (as COM1 or /dev/ttyS0 for example). In the case of a virtual board, the file is created by dgtnixVirtualBoard. It's name is the first argument to dgtnixVirtualBoard and is set to be /tmp/dgtnixSock by default.
+1)
+dgtnixVirtualBoard.py 
+
+then run a client application (as dgtnixTest.py for example)
+
+C++ VERSION TEST
+----------------
+1) 
+dgtnixTest <port>
+
+where <port> is the port to which the board is connected.
+For usb connection, try : /dev/usb/tts/0 /dev/usb/tts/1 /dev/usb/tts/2 ...
+For serial, try : /dev/ttyS0 /dev/ttyS1 /dev/ttyS2 ...
+For the virtual board, /tmp/dgtnixSock is the default but you can choose it ...
+
+PYTHON VERSION TEST
+-------------------
+1) 
+./dgtnixTest.py <port>
+
+where <port> is the port to which the board is connected.
+For usb connection, try : /dev/usb/tts/0 /dev/usb/tts/1 /dev/usb/tts/2 ...
+For serial, try : /dev/ttyS0 /dev/ttyS1 /dev/ttyS2 ...
+For the virtual board, /tmp/dgtnixSock is the default but you can choose it ...
+
+QtWidget
+-----------
+There is a Qt4.1 application in the directory QtWidget. You
+can build if you have qt4.1 installed on your system :
+
+1) compile 
+cd QtWidget
+qmake 
+make
+
+2) run the application
+./QtWidget
+
+
+
+Warning: The Mac OSX and Cygwin version are for testing only !
+ 
+
+The automake/autoconf/libtool scripts where build unsing :
+
+automake 1.9
+aclocal 1.9
+autoconf 2.6
+
+to recreate them use :
+autoreconf --install --force

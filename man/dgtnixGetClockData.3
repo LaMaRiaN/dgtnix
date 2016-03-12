@@ -1,0 +1,69 @@
+.\" Copyright (c) 2007 Alexander Wanger
+.\"
+.\" This is free documentation; you can redistribute it and/or
+.\" modify it under the terms of the GNU General Public License as
+.\" published by the Free Software Foundation; either version 2 of
+.\" the License, or (at your option) any later version.
+.\"
+.\" The GNU General Public License's references to "object code"
+.\" and "executables" are to be interpreted as the output of any
+.\" document formatting or typesetting system, including
+.\" intermediate and printed output.
+.\"
+.\" This manual is distributed in the hope that it will be useful,
+.\" but WITHOUT ANY WARRANTY; without even the implied warranty of
+.\" MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+.\" GNU General Public License for more details.
+.\"
+.\" You should have received a copy of the GNU General Public
+.\" License along with this manual; if not, write to the Free
+.\" Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111,
+.\" USA.
+.\"
+.TH dgtnixGetClockData 3  2007-02-02 "dgtnix Manpage" "dgtnix Library Reference"
+.SH NAME
+dgtnixGetClockData
+.SH SYNOPSIS
+.B #include <dgtnix.h>
+.sp
+.BI "int dgtnixGetClockData(int * white_time, int * black_time, int *
+turn);"
+.PP
+The function
+.B dgtnixGetClockData
+reads data not from the chess board itself but from an attached DGT
+Digital Chess Clock.
+.PP
+.SS "Return value"
+.TP
+.B 1
+A DGT Digital Chess Clock was found.
+.TP
+.B 0
+No DGT Digital Chess Clock was found.
+.PP
+.SS "Argument"
+.TP
+.B white_time
+an integer pointer that contains whites time as sent by the clock.
+.TP
+.B black_time
+an integer pointer that contains blacks time as sent by the clock.
+.TP
+.B white_turn
+regarding the buttons on the clock 1 is returned if it si white to
+move, 0 otherwise (ie. black to move).
+
+.SH NOTES
+Obviously this function has no effect if no clock is attached. However
+a clock is 
+.B not
+required to use the DGT Electronic Chess board.
+
+.SH "SEE ALSO"
+.BR dgtnixClose (3),
+.BR dgtnixGetClockData (3),
+.BR dgtnixPrintBoard (3),
+.BR dgtnixQueryString (3),
+.BR dgtnixSetOption (3),
+.BR dgtnixTestBoard (3)

@@ -1,0 +1,85 @@
+.\" Copyright (c) 2007 Alexander Wanger
+.\"
+.\" This is free documentation; you can redistribute it and/or
+.\" modify it under the terms of the GNU General Public License as
+.\" published by the Free Software Foundation; either version 2 of
+.\" the License, or (at your option) any later version.
+.\"
+.\" The GNU General Public License's references to "object code"
+.\" and "executables" are to be interpreted as the output of any
+.\" document formatting or typesetting system, including
+.\" intermediate and printed output.
+.\"
+.\" This manual is distributed in the hope that it will be useful,
+.\" but WITHOUT ANY WARRANTY; without even the implied warranty of
+.\" MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+.\" GNU General Public License for more details.
+.\"
+.\" You should have received a copy of the GNU General Public
+.\" License along with this manual; if not, write to the Free
+.\" Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111,
+.\" USA.
+.\"
+.TH dgtnixSetOption 3  2007-02-02 "dgtnix Manpage" "dgtnix Library Reference"
+.SH NAME
+dgtnixSetOption
+.SH SYNOPSIS
+.B #include <dgtnix.h>
+.sp
+.BI "void dgtnixSetOption(unsigned long option, unsigned int value);"
+.PP
+The function
+.B dgtnixSetOption
+can be used to set options for the board handling or the dgtnix
+library.
+.PP
+.SS "Arguments"
+The first argument is the options name to set. Valid names are:
+.TP
+.B DGTNIX_DEBUG
+This enables debug output form the dgtnix library. The debugging
+output is written to 
+.I stderr.
+Possible values are
+.RS
+.IP DGTNIX_DEBUG_OFF
+Debugging is disabled, not messages are written. This should be the
+default for stable applications.
+.IP DGTNIX_DEBUG_ON
+Enables general debugging but without messages resulting from the DGT
+Digital Chess Clock which can be attached to the board.
+.IP DGTNIX_DEBUG_WITH_TIME
+Writes all debugging messages including those resulting from the DGT
+Digital Chess Clock.
+.RE
+.PP
+.TP
+.B DGTNIX_BOARD_ORIENTATION
+Though the board as such is symmetric it has internally an
+orientation. If the serial or USB connector of the board is to the
+left of whites pieces in the starting position, than A1 is in the
+lower left corner. If the board is used "with the clock to whites
+right" it is used "upside down". For changes on the board to be
+transcoded correctly by the dgtnix library one can use 
+.I DGTNIX_BOARD_ORIENTATION
+to set this. Valid values are
+.RS
+.IP DGTNIX_BOARD_ORIENTATION_CLOCKLEFT
+This is the normal orientation of the board.
+.IP DGTNIX_BOARD_ORIENTATION_CLOCKRIGHT
+This is the upside down orientation.
+.RE
+.PP
+
+.SH NOTES
+It is advisable to set the options after dgtnixInit. However they can
+of course be changes while the connection is open. The effect is
+immediate.
+
+.SH "SEE ALSO"
+.BR dgtnixClose (3),
+.BR dgtnixGetClockData (3),
+.BR dgtnixPrintBoard (3),
+.BR dgtnixQueryString (3),
+.BR dgtnixSetOption (3),
+.BR dgtnixTestBoard (3)

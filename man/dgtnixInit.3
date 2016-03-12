@@ -1,0 +1,135 @@
+.\" Copyright (c) 2007 Alexander Wanger
+.\"
+.\" This is free documentation; you can redistribute it and/or
+.\" modify it under the terms of the GNU General Public License as
+.\" published by the Free Software Foundation; either version 2 of
+.\" the License, or (at your option) any later version.
+.\"
+.\" The GNU General Public License's references to "object code"
+.\" and "executables" are to be interpreted as the output of any
+.\" document formatting or typesetting system, including
+.\" intermediate and printed output.
+.\"
+.\" This manual is distributed in the hope that it will be useful,
+.\" but WITHOUT ANY WARRANTY; without even the implied warranty of
+.\" MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+.\" GNU General Public License for more details.
+.\"
+.\" You should have received a copy of the GNU General Public
+.\" License along with this manual; if not, write to the Free
+.\" Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111,
+.\" USA.
+.\"
+.TH dgtnixInit 3  2007-02-02 "dgtnix Manpage" "dgtnix Library Reference"
+.SH NAME
+dgtnixInit
+.SH SYNOPSIS
+.B #include <dgtnix.h>
+.sp
+.BI "int dgtnixInit(const char *);"
+.PP
+The functions in the
+.B dgtnixInit
+initialises the connection to the DGT Electronic Chess board and
+returns a read only file handle for the communication.
+.PP
+.SS "Return value"
+Upon successful return, this function returns a read only file handle
+to read messages from the chess board if the connection was
+established successfully. Otherwise the following error codes occur:
+.TP
+.B -1
+dgtnix was unable to open the port e.g. because it is blocked by
+another application or due to a lack of permissions.
+.TP
+.B -2
+The port was opened successfully but hte device conneced does not look
+like a DGT Electronic chess board.
+.SS "Event handling"
+To read the board the returned file descriptor has to be read. In a
+generic way this can be done in C/C++ using the
+.B select
+(2) function. The basic code would read
+.PP
+     int BoardDescriptor;
+
+     fd_set readfds;
+     struct timeval tv;
+     int    result;
+
+     BoardDescriptor = dgtnixInit("/dev/ttyS0");
+
+     while(1) {
+         // add filehandle to event check
+         FD_ZERO(&readfds);
+         FD_SET(BoardDescriptor, &readfds);
+
+         // delay to wait for an event
+         tv.tv_sec  = secs;
+         tv.tv_usec = usecs;
+
+         // Check both file handle for events
+         result = select(32, &readfds, 0, 0, &tv);
+
+         if (FD_ISSET(BoardDescriptor, &readfds)) {
+             // There was a board event
+             HandleDGT(BoardDescriptor);
+         }
+.PP
+The actual board event then has to be read from the descriptor as a 4
+byte message:
+.PP
+        char  buffer[4];
+        bytes = read(BoardDescriptor, buffer, 4);
+.PP
+where 
+.I buffer
+contains the event that occured on the board. The format is
+.PP
+        event  = buffer[0];
+        row    = char(buffer[1]+32);
+        column = char(buffer[2]+48);
+        piece  = char(buffer[3]);
+.PP
+Possible events are
+.TP
+.B DGTNIX_MSG_MV_REMOVE
+for the removal of the piece. The following 4 characters encode square
+and the piece to be removed. With the above code the removal of the
+White king from A4 would read as
+.PP
+        event  = DGTNIX_MSG_MV_REMOVE;
+        row    = int('A')-32;
+        column = int('4')-48;
+        piece  = int('K');
+.PP
+.TP 
+.B DGTNIX_MSG_MV_ADD
+describes the addition of a piece to a given square. The format of the
+message is identical to
+.I DGTNIX_MSG_MV_REMOVE.
+.TP 
+.B DGTNIX_MSG_TIME
+This event occurs only if the DGT Digital Chess Clock is connected to
+the board. It signifies the availability of a time event which is
+normally triggered every 500ms.
+.PP
+The encoding of the pieces follows english algebraic codes where lower
+case characters are used for Black, uppercase caracters for White
+pieces. That is 'N' stands for a white knight whereas 'b' describes a
+black bishop. Pawns are explcitly labled by 'P' or 'p' respectively.
+.SS "Argument"
+The argument must be the port the DGT Electronic Chess board is
+connected to. 
+
+.SH NOTES
+.B dgtnixInit()
+should be called before any other function of the library.
+
+.SH "SEE ALSO"
+.BR dgtnixClose (3),
+.BR dgtnixGetClockData (3),
+.BR dgtnixPrintBoard (3),
+.BR dgtnixQueryString (3),
+.BR dgtnixSetOption (3),
+.BR dgtnixTestBoard (3)

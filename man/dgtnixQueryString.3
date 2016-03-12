@@ -1,0 +1,69 @@
+.\" Copyright (c) 2007 Alexander Wanger
+.\"
+.\" This is free documentation; you can redistribute it and/or
+.\" modify it under the terms of the GNU General Public License as
+.\" published by the Free Software Foundation; either version 2 of
+.\" the License, or (at your option) any later version.
+.\"
+.\" The GNU General Public License's references to "object code"
+.\" and "executables" are to be interpreted as the output of any
+.\" document formatting or typesetting system, including
+.\" intermediate and printed output.
+.\"
+.\" This manual is distributed in the hope that it will be useful,
+.\" but WITHOUT ANY WARRANTY; without even the implied warranty of
+.\" MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+.\" GNU General Public License for more details.
+.\"
+.\" You should have received a copy of the GNU General Public
+.\" License along with this manual; if not, write to the Free
+.\" Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111,
+.\" USA.
+.\"
+.TH dgtnixQueryString 3  2007-02-02 "dgtnix Manpage" "dgtnix Library Reference"
+.SH NAME
+dgtnixQueryString
+.SH SYNOPSIS
+.B #include <dgtnix.h>
+.sp
+.BI "const char dgtnixQueryString(unsigned int);"
+.PP
+The function
+.B dgtnixQueryString
+is uesd to retrieve information from the board.
+.PP
+.SS "Arguments"
+The following arguments can be passed to
+.I dgtnixQueryString
+.TP
+.B DGTNIX_SERIAL_STRING
+The serial number of the DGT Electronic Chess board.
+.TP
+.B DGTNIX_BUS_ADDRESS_STRING
+The current BUS address of the board.
+.TP
+.B DGTNIX_VERSION_STRING
+The version of the boards internal software.
+.TP
+.B DGTNIX_TRADEMARK_STRING
+The trademark string of the board.
+.I Note
+This string contains line breaks.
+.TP
+.B DGTNIX_VERSION
+The version of the dgtnix library itself.
+.PP
+.SS "Return values"
+The requested string in printable form.
+.SH NOTES
+The returned string 
+.B must not
+be freed!
+
+.SH "SEE ALSO"
+.BR dgtnixClose (3),
+.BR dgtnixGetClockData (3),
+.BR dgtnixPrintBoard (3),
+.BR dgtnixQueryString (3),
+.BR dgtnixSetOption (3),
+.BR dgtnixTestBoard (3)
